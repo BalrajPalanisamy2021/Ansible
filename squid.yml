@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: true
+  tasks:
+  - name: updating system
+    dnf:
+     name: "*"
+     state: latest
+  - name: install squid proxy rpm
+    dnf:
+     name: squid
+     state: latest
+  - name: starting squid proxy service
+    service:
+     name: squid
+     state: started
+     enabled: yes
+  - name: Backup the existing squid.conf file
+    copy:
+     src: /etc/squid/squid.conf
+     dest: /etc/squid/squid.conf.bkp
+
+  - name: Downloading actual squid conf file
+    anisibel.builtin.git:
+     repo: /../../.repo.git
+     dest: /src/checkout
+     version: relese-0.22
+  - name: restart squid after replacing orig file
+    service:
+     name: squid
+     state: restarted
+  - name: Perform heathcheck on squid service
+    curl:
+     url:
+    register: hc_output
+    failed_when: hc_output.rc != 0
