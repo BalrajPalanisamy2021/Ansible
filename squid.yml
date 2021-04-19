@@ -3,6 +3,12 @@
   become: yes
   gather_facts: true
   tasks:
+  - name: install dependencies
+    dnf:
+     name: "{{ item }}"
+    with_items:
+    - git
+
   - name: updating system
     dnf:
      name: "*"
@@ -20,18 +26,25 @@
     copy:
      src: /etc/squid/squid.conf
      dest: /etc/squid/squid.conf.bkp
+     remote_src: yes
 
   - name: Downloading actual squid conf file
-    anisibel.builtin.git:
-     repo: /../../.repo.git
-     dest: /src/checkout
-     version: relese-0.22
+    git:
+     repo: https://github.com/BalrajPalanisamy2021/Ansible.git
+     dest: //etc/squid/conf
+  - name: copy the squid conf file to default location
+    copy:
+     src: /etc/squid/conf/squid.conf
+     dest: /etc/squid
+     remote_src: yes
+
+         
   - name: restart squid after replacing orig file
     service:
      name: squid
      state: restarted
-  - name: Perform heathcheck on squid service
-    curl:
-     url:
-    register: hc_output
-    failed_when: hc_output.rc != 0
+     #- name: Perform heathcheck on squid service
+     #curl:
+     #url:
+     #register: hc_output
+     #failed_when: hc_output.rc != 0
