@@ -31,12 +31,13 @@
   - name: Downloading actual squid conf file
     git:
      repo: https://github.com/BalrajPalanisamy2021/Ansible.git
-     dest: //etc/squid/conf
+     dest: /etc/squid/conf
   - name: copy the squid conf file to default location
     copy:
      src: /etc/squid/conf/squid.conf
      dest: /etc/squid
      remote_src: yes
+     update: yes
 
          
   - name: restart squid after replacing orig file
