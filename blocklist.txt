@@ -1,2 +1,2 @@
-.facebook.com
-.twitter.com
+www.facebook.com
+www.twitter.com
