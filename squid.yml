@@ -30,7 +30,7 @@
 
   - name: Downloading actual squid conf file
     git:
-     repo: https://bitbucket.vficloud.net/scm/global/ansible.git
+     repo: https://github.com/BalrajPalanisamy2021/Ansible.git
      dest: /etc/squid/conf
      update: yes
   - name: copy the squid conf file to default location
